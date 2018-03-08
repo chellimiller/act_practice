@@ -1,0 +1,65 @@
+<!doctype html>
+<html>
+<title>Dosmin</title>
+<meta charset="utf-8">
+<body onload="load()">
+
+<header>
+	<nav></nav>
+</header>
+
+<main>
+	<section>
+		<form id="act_question" method="get">
+			<span id="question"></span>
+			<ol type="A">
+				<li><input type="radio" name="answer" value="a" /> <span id="answer_a"></span></li>
+				<li><input type="radio" name="answer" value="b" /> <span id="answer_b"></span></li>
+				<li><input type="radio" name="answer" value="c" /> <span id="answer_c"></span></li>
+				<li><input type="radio" name="answer" value="d" /> <span id="answer_d"></span></li>
+				<li><input type="radio" name="answer" value="e" /> <span id="answer_e"></span></li>
+			</ol>
+		</form>
+		<button onclick="check_answer()">Check Answer</button>
+		<br /><br />
+		<span id="result"></span>
+	</section>
+</main>
+
+<footer>
+</footer>
+
+<script>
+var questions = [
+	{q:"A car averages 27 miles per gallon. If gas costs $4.04 per gallon, which of the following is closest to how much the gas would cost for this car to travel 2,727 typical miles?",
+		a:"$44.44",
+		b:"$109.08",
+		c:"$118.80",
+		d:"$408.04",
+		e:"$444.40",
+		ans:"d"}
+	];
+
+function load() {
+	document.getElementById("question").innerHTML = questions[0].q;
+	document.getElementById("answer_a").innerHTML = questions[0].a;
+	document.getElementById("answer_b").innerHTML = questions[0].b;
+	document.getElementById("answer_c").innerHTML = questions[0].c;
+	document.getElementById("answer_d").innerHTML = questions[0].d;
+	document.getElementById("answer_e").innerHTML = questions[0].e;
+}
+
+function check_answer() {
+	let answer = document.getElementById("act_question")["answer"].value;
+	if (answer === questions[0].ans) {
+		document.getElementById("result").innerHTML = "Correct!";
+	} else if (answer === "") {
+		document.getElementById("result").innerHTML = "Please choose an answer";
+	} else {
+		document.getElementById("result").innerHTML = "Sorry, that's not the correct answer";
+	}
+}
+
+</script>
+</body>
+</html>
