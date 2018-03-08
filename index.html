@@ -9,21 +9,8 @@
 </header>
 
 <main>
-	<section>
-		<form id="act_question" method="get">
-			<span id="question"></span>
-			<ol type="A">
-				<li><input type="radio" name="answer" value="a" /> <span id="answer_a"></span></li>
-				<li><input type="radio" name="answer" value="b" /> <span id="answer_b"></span></li>
-				<li><input type="radio" name="answer" value="c" /> <span id="answer_c"></span></li>
-				<li><input type="radio" name="answer" value="d" /> <span id="answer_d"></span></li>
-				<li><input type="radio" name="answer" value="e" /> <span id="answer_e"></span></li>
-			</ol>
-		</form>
-		<button onclick="check_answer()">Check Answer</button>
-		<br /><br />
-		<span id="result"></span>
-	</section>
+	<form id="questions" action="javascript:void(0);">
+	</form>
 </main>
 
 <footer>
@@ -37,27 +24,52 @@ var questions = [
 		c:"$118.80",
 		d:"$408.04",
 		e:"$444.40",
-		ans:"d"}
+		ans:"d"},
+	{q:"What's the answer? (it's B)",
+		a:"A",
+		b:"B",
+		c:"C",
+		d:"D",
+		e:"E",
+		ans:"b"}
 	];
 
 function load() {
-	document.getElementById("question").innerHTML = questions[0].q;
-	document.getElementById("answer_a").innerHTML = questions[0].a;
-	document.getElementById("answer_b").innerHTML = questions[0].b;
-	document.getElementById("answer_c").innerHTML = questions[0].c;
-	document.getElementById("answer_d").innerHTML = questions[0].d;
-	document.getElementById("answer_e").innerHTML = questions[0].e;
+	let html = "";
+	for (let i in questions) {
+		html += '<span id="q' + i + '">' + questions[i].q + '</span> \
+			<ol type="A"> \
+				<li><input type="radio" name="a' + i + '" value="a" />' + questions[i].a + '</li> \
+				<li><input type="radio" name="a' + i + '" value="b" />' + questions[i].b + '</li> \
+				<li><input type="radio" name="a' + i + '" value="c" />' + questions[i].c + '</li> \
+				<li><input type="radio" name="a' + i + '" value="d" />' + questions[i].d + '</li> \
+				<li><input type="radio" name="a' + i + '" value="e" />' + questions[i].e + '</li> \
+			</ol> \
+		<button onclick="check_answer(' + i + ')">Check Answer</button> \
+		<br /><br /> \
+		<span id="r' + i + '"></span> \
+		<br /><br /> ';
+	}
+
+	document.getElementById("questions").innerHTML = html;
 }
 
-function check_answer() {
-	let answer = document.getElementById("act_question")["answer"].value;
-	if (answer === questions[0].ans) {
-		document.getElementById("result").innerHTML = "Correct!";
+function check_answer(id) {
+
+	let res_id = "r" + id;
+	let ans_id = "a" + id
+	let answer = document.getElementById("questions")[ans_id].value;
+	
+	console.log(answer + "===" + questions[id].ans);
+	
+	if (answer === questions[id].ans) {
+		document.getElementById(res_id).innerHTML = "TRUE";
 	} else if (answer === "") {
-		document.getElementById("result").innerHTML = "Please choose an answer";
+		document.getElementById(res_id).innerHTML = "Select an answer";
 	} else {
-		document.getElementById("result").innerHTML = "Sorry, that's not the correct answer";
+		document.getElementById(res_id).innerHTML = "FALSE";
 	}
+	
 }
 
 </script>
