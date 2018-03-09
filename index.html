@@ -9,8 +9,11 @@
 </header>
 
 <main>
-	<form id="questions" action="javascript:void(0);">
+	<form id="q_form" action="javascript:void(0);">
 	</form>
+	<button onclick="check_answers()">Check Answers</button>
+	<br /><br />
+	<span id="results"></span>
 </main>
 
 <footer>
@@ -37,7 +40,8 @@ var questions = [
 function load() {
 	let html = "";
 	for (let i in questions) {
-		html += '<span id="q' + i + '">' + questions[i].q + '</span> \
+		html += '<div class="question" id="' + i + '"> \
+			<span id="q' + i + '">' + questions[i].q + '</span> \
 			<ol type="A"> \
 				<li><input type="radio" name="a' + i + '" value="a" />' + questions[i].a + '</li> \
 				<li><input type="radio" name="a' + i + '" value="b" />' + questions[i].b + '</li> \
@@ -45,31 +49,32 @@ function load() {
 				<li><input type="radio" name="a' + i + '" value="d" />' + questions[i].d + '</li> \
 				<li><input type="radio" name="a' + i + '" value="e" />' + questions[i].e + '</li> \
 			</ol> \
-		<button onclick="check_answer(' + i + ')">Check Answer</button> \
-		<br /><br /> \
-		<span id="r' + i + '"></span> \
-		<br /><br /> ';
+		</div>';
 	}
 
-	document.getElementById("questions").innerHTML = html;
+	document.getElementById("q_form").innerHTML = html;
 }
 
-function check_answer(id) {
-
-	let res_id = "r" + id;
-	let ans_id = "a" + id
-	let answer = document.getElementById("questions")[ans_id].value;
+function check_answers() {
+	let correct = 0;
+	let q_elements = document.getElementsByClassName("question");
 	
-	console.log(answer + "===" + questions[id].ans);
-	
-	if (answer === questions[id].ans) {
-		document.getElementById(res_id).innerHTML = "TRUE";
-	} else if (answer === "") {
-		document.getElementById(res_id).innerHTML = "Select an answer";
-	} else {
-		document.getElementById(res_id).innerHTML = "FALSE";
+	for (let i = 0; i < questions.length; i++) {
+		let id = i;
+		let q_id = "q" + id;
+		let ans_id = "a" + id;
+		let answer = document.getElementById("q_form")[ans_id].value;
+		if (answer === questions[id].ans) {
+			correct++;
+			document.getElementById(q_id).innerHTML = questions[i].q + "<br />YAY!";
+		} else if (answer === "") {
+			document.getElementById(q_id).innerHTML = questions[i].q + "<br />ANSWER THE QUESTION!";
+		} else {
+			document.getElementById(q_id).innerHTML = questions[i].q + "<br />WRONG!";
+		}
 	}
 	
+	document.getElementById("results").innerHTML = correct + " / " + q_elements.length + " are correct!";
 }
 
 </script>
