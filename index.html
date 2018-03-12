@@ -2,18 +2,43 @@
 <html>
 <title>Dosmin</title>
 <meta charset="utf-8">
+<style>
+header {
+	display: flex;
+	flex-flow: row wrap;
+	justify-content: space-between;
+	font-size: 2em;
+} header div {
+	text-align: center;
+}
+
+main form {
+	display: flex;
+	flex-flow: row wrap;
+	justify-content: flex-start;
+} main div {
+	width: 15em;
+	min-height: 15em;
+	margin: 1em;
+	padding: 1em;
+}
+</style>
 <body onload="load()">
 
 <header>
-	<nav></nav>
+	<div>
+		<span id="title">ACT PRACTICE</span>
+	</div>
+	<div>
+		<span id="timer"></span>
+		<br />
+		<button id="submit" onclick="check_answers()">Submit Test</button>
+	</div>
 </header>
 
 <main>
 	<form id="q_form" action="javascript:void(0);">
 	</form>
-	<button onclick="check_answers()">Check Answers</button>
-	<br /><br />
-	<span id="results"></span>
 </main>
 
 <footer>
@@ -25,7 +50,7 @@ var questions = [
 		a:"$44.44",
 		b:"$109.08",
 		c:"$118.80",
-		d:"$408.04",
+		d:"$408.04*",
 		e:"$444.40",
 		ans:"d"},
 	{q:"What's the answer? (it's B)",
@@ -34,8 +59,34 @@ var questions = [
 		c:"C",
 		d:"D",
 		e:"E",
-		ans:"b"}
+		ans:"b"},
+	{q:"What's the answer? (it's C)",
+		a:"A",
+		b:"B",
+		c:"C",
+		d:"D",
+		e:"E",
+		ans:"c"},
+	{q:"What's the answer? (it's E)",
+		a:"A",
+		b:"B",
+		c:"C",
+		d:"D",
+		e:"E",
+		ans:"e"},
+	{q:"What's the answer? (it's A)",
+		a:"A",
+		b:"B",
+		c:"C",
+		d:"D",
+		e:"E",
+		ans:"a"}
 	];
+	
+var seconds = questions.length * 60;
+var timer = setInterval(update_timer, 1000);
+
+var score;
 
 function load() {
 	let html = "";
@@ -52,7 +103,19 @@ function load() {
 		</div>';
 	}
 
-	document.getElementById("q_form").innerHTML = html;
+	document.getElementById("q_form").innerHTML = html;	
+	document.getElementById("timer").innerHTML = seconds + " seconds";
+	
+}
+
+function update_timer() {
+	seconds--;
+	document.getElementById("timer").innerHTML = seconds + " seconds";
+	
+	if (seconds === 0) {
+		clearInterval(timer);
+		check_answers();
+	}
 }
 
 function check_answers() {
@@ -66,15 +129,23 @@ function check_answers() {
 		let answer = document.getElementById("q_form")[ans_id].value;
 		if (answer === questions[id].ans) {
 			correct++;
-			document.getElementById(q_id).innerHTML = questions[i].q + "<br />YAY!";
-		} else if (answer === "") {
-			document.getElementById(q_id).innerHTML = questions[i].q + "<br />ANSWER THE QUESTION!";
+			document.getElementById(q_id).innerHTML = "✔" + questions[i].q;
+			document.getElementById(q_id).style = "color:green";
 		} else {
-			document.getElementById(q_id).innerHTML = questions[i].q + "<br />WRONG!";
+			document.getElementById(q_id).innerHTML = "✘" + questions[i].q;
+			document.getElementById(q_id).style = "color:red";
+		}
+		let radio_buttons = document.getElementsByName(ans_id);
+		for (let j = 0; j < radio_buttons.length; j++) {
+			radio_buttons[j].disabled = true;
 		}
 	}
 	
-	document.getElementById("results").innerHTML = correct + " / " + q_elements.length + " are correct!";
+	score = correct / q_elements.length;
+	document.getElementById("submit").disabled = true;
+	document.getElementById("submit").innerHTML = "Test has been submitted";
+	document.getElementById("timer").innerHTML = "SCORE: " + correct + " / " + q_elements.length + " (" + (score * 100) + "%)";
+	clearInterval(timer);
 }
 
 </script>
